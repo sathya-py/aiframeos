@@ -1,0 +1,40 @@
+# AIFrameOS Core Constraints (The Law)
+
+version: "1.0"
+enforcement_level: "strict"
+
+constraints:
+  architecture:
+    - rule_id: "arch-001"
+      description: "Adhere to established patterns defined in dev-docs/ssot/."
+      action: "halt_on_violation"
+    - rule_id: "arch-002"
+      description: "Prevent state leakage across unrelated modules."
+      action: "warn_and_correct"
+  
+  context_management:
+    - rule_id: "ctx-001"
+      description: "Enforce Symbolic Resolution. Do not read files > 500 lines entirely unless specifically targeted."
+      action: "enforce"
+    - rule_id: "ctx-002"
+      description: "Maintain WISC protocol. Verify Isolation before writing."
+      action: "enforce"
+
+  execution:
+    - rule_id: "exec-001"
+      description: "All implementation tasks must be driven by a Project-Requirement-Prompt (PRP)."
+      action: "halt_on_violation"
+    - rule_id: "exec-002"
+      description: "Every PRP must include at least one validation gate (e.g., test, lint)."
+      action: "halt_on_violation"
+    - rule_id: "exec-003"
+      description: "Never expose or log credentials, API keys, or sensitive environment variables."
+      action: "halt_on_violation"
+
+validation:
+  pre_flight:
+    - "Check for active PRP payload in .aiframe/prps/"
+    - "Verify context anchors exist."
+  post_flight:
+    - "Execute PRP defined validation gates."
+    - "Update .aiframe/status/catalog.json upon success."

@@ -1,0 +1,19 @@
+audit:
+  timestamp: "2026-03-20T00:00:00Z"
+  stack_detected: "none"
+  project_status: "Greenfield"
+  gravity_files_found: []
+
+environment:
+  active_rules: "core_constraints_only"
+  required_skills: []
+
+initialized_paths:
+  - ".aiframe/dev-docs/architecture"
+  - ".aiframe/dev-docs/ssot"
+  - ".aiframe/dev-docs/docs-of-interest"
+  - ".aiframe/dev-docs/commentaries"
+  - ".aiframe/prps"
+  - ".aiframe/status"
+  - ".aiframe/skills"
+  - ".aiframe/examples"

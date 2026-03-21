@@ -1,0 +1,26 @@
+version: "1.0"
+description: "Execution logic for the WISC (Write, Isolate, Select, Compress) Protocol."
+
+strategies:
+  Write:
+    - rule: "Surgical precision"
+      description: "Perform AST-aware or targeted replacements instead of rewriting entire files."
+      action: "Enforce exact literal replacements or minimal diffs. Avoid full-file overwrites for existing files."
+  
+  Isolate:
+    - rule: "Scope containment"
+      description: "Limit the execution scope to the specific files and symbols defined in the PRP context_anchors."
+      action: "Reject any tool call attempting to modify files outside the context_anchors without explicit authorization."
+  
+  Select:
+    - rule: "Symbolic Resolution"
+      description: "Never read full files unless under 100 lines. Use grep/AST search to find interfaces, classes, and function signatures."
+      techniques:
+        - "Use grep with regex to find function signatures (e.g., `def my_func`, `class MyClass`, `interface MyInterface`)."
+        - "Use grep with context (e.g., `-C 5`) to read only the necessary surrounding lines."
+        - "Use targeted file reading with start_line and end_line for surgical reading."
+  
+  Compress:
+    - rule: "State Summarization"
+      description: "After completing a PRP, summarize the architectural changes and update the status tracking files instead of keeping the full implementation details in context."
+      action: "Update .aiframe/status/catalog.json and relevant dev-docs/ssot/ files with compressed state."
