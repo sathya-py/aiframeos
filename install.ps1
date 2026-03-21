@@ -10,22 +10,23 @@ If (Test-Path $AIFRAME_DIR) {
 
 Write-Host "📦 Downloading AIFrameOS core components..."
 
-New-Item -Path "$AIFRAME_DIR/core" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/commands" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/prompts/templates" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/dev-docs/architecture" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/dev-docs/ssot" -ItemType Directory -Force | Out-Null
+$TMP_DIR = Join-Path $env:TEMP "aiframeos-install-$(Get-Random)"
+New-Item -Path $TMP_DIR -ItemType Directory -Force | Out-Null
+$ZIP_FILE = Join-Path $TMP_DIR "main.zip"
+
+Invoke-WebRequest -Uri "https://github.com/sathya-py/aiframeos/archive/refs/heads/main.zip" -OutFile $ZIP_FILE
+
+Expand-Archive -Path $ZIP_FILE -DestinationPath $TMP_DIR -Force
+
+Move-Item -Path (Join-Path $TMP_DIR "aiframeos-main\.aiframe") -Destination "."
+
+Remove-Item $TMP_DIR -Recurse -Force
+
+# Create empty directories not tracked by git
 New-Item -Path "$AIFRAME_DIR/dev-docs/docs-of-interest" -ItemType Directory -Force | Out-Null
+New-Item -Path "$AIFRAME_DIR/dev-docs/architecture" -ItemType Directory -Force | Out-Null
 New-Item -Path "$AIFRAME_DIR/dev-docs/commentaries" -ItemType Directory -Force | Out-Null
 New-Item -Path "$AIFRAME_DIR/prps" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/status" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/skills" -ItemType Directory -Force | Out-Null
-New-Item -Path "$AIFRAME_DIR/examples" -ItemType Directory -Force | Out-Null
-
-Write-Host "Creating default configurations..."
-
-Set-Content -Path "$AIFRAME_DIR/status/catalog.json" -Value '{ "version": "1.0", "tasks": [] }'
-Set-Content -Path "$AIFRAME_DIR/status/project_state.yaml" -Value 'audit: { project_status: "Pending Init" }'
 
 Write-Host "✅ AIFrameOS directory structure created."
 Write-Host ""
