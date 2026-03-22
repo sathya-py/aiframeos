@@ -20,6 +20,11 @@ strategies:
         - "Use grep with context (e.g., `-C 5`) to read only the necessary surrounding lines."
         - "Use targeted file reading with start_line and end_line for surgical reading."
   
+  Recover:
+    - rule: "Self-Healing & Auto-Rollback"
+      description: "If a validation gate fails, do not immediately halt. Attempt a self-healing retry loop or rollback to a known good state."
+      action: "Take a pre-flight git snapshot before execution. If validation fails, spawn a sub-prompt with error logs to retry up to 3 times. If all retries fail, execute rollback to the pre-flight snapshot."
+
   Compress:
     - rule: "State Summarization"
       description: "After completing a PRP, summarize the architectural changes and update the status tracking files instead of keeping the full implementation details in context."

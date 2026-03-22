@@ -3,18 +3,24 @@
 ## Triggered Action
 When this initialization sequence is requested, perform a **System Reset** and execute the following deterministic steps:
 
-### 1. Heuristic Audit
-- Scan the root directory for "Gravity Files" (e.g., `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, `docker-compose.yml`).
-- Determine the technology stack based on these files.
+### 1. Heuristic Audit & Stack Sniffing
+- Scan the root directory for "Gravity Files" (e.g., `package.json`, `Cargo.toml`, `.csproj`, `go.mod`, `pyproject.toml`, `docker-compose.yml`).
+- Determine the technology stack **and specific versions** based on these files (e.g., "Svelte 5", "Rust 2021", ".NET 8").
 - Classify the project status:
   - **Brownfield**: Significant pre-existing codebase detected.
   - **Greenfield**: Empty or minimally populated repository.
 
-### 2. Environment Tailoring
-- Based on the detected stack, auto-generate or update `.aiframe/core/rules.yaml` to include stack-specific constraints (e.g., specific linters, testing frameworks, idiomatic patterns).
-- Note required skills to be activated in the `skills/` directory.
+### 2. Domain Context Query
+- Stop and explicitly ask the user: *"What is the business domain or primary purpose of this project? (e.g., Finance, Algorithmic Trading, E-commerce, Gaming)?"*
+- Wait for the user's response before proceeding to generate skills.
 
-### 3. Documentation Initialization
+### 3. Dynamic Skill Provisioning & Environment Tailoring
+- Based on the detected stack and the user's domain context, **auto-generate specific specialized `.md` skill files** directly into `.aiframe/skills/`.
+  - *Example:* If Svelte 5 is detected, generate `svelte5-specialist.md` strictly prohibiting Svelte 4 legacy patterns.
+  - *Example:* If the domain is Finance and stack is Rust, generate `rust-fintech-expert.md` detailing precision float handling and high-performance patterns.
+- Auto-generate or update `.aiframe/core/rules.yaml` to include stack-specific constraints (e.g., specific linters, testing frameworks, idiomatic patterns).
+
+### 4. Documentation Initialization
 - Generate the following directory structure if it does not exist:
   - `dev-docs/architecture/` (For `.md` human-readable design docs)
   - `dev-docs/ssot/` (For `.yaml` AI-only machine-readable technical truths)

@@ -14,6 +14,7 @@ A specific `task_id` corresponding to a YAML file in `.aiframe/prps/`.
    - Validate that all `context_anchors` (files and symbols) exist in the codebase using Symbolic Resolution (unless the intent is to create them).
 
 2. **Implementation (WISC Enforced)**:
+   - **Evaluate Complexity**: If the PRP touches multiple domains or is highly complex, the main agent MUST invoke `/subagent` to delegate work to isolated threads, preventing context degradation.
    - **Isolate**: Restrict all file reads and writes strictly to the files listed in `context_anchors`. Do not modify out-of-scope files.
    - **Write**: Implement the intent using surgical edits. Follow the `constraints` strictly. Reference `examples/` if applicable.
 
