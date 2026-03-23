@@ -2,9 +2,16 @@
 
 AIFrameOS is a lightweight, configuration-based orchestration layer designed to live alongside your codebase in a `.aiframe/` directory. It transforms any capable AI assistant (Cursor, VS Code + Claude Code, Gemini CLI, Cline, Windsurf) into a highly deterministic, token-efficient developer.
 
-It features a **universal 1-line installation script natively supported on Mac, Linux, and Windows.**
+It features a **universal, non-destructive 1-line installation/update script** natively supported on Mac, Linux, and Windows.
 
-By relying on strict **Context Engineering**, the **WISC Protocol**, and **Metaprompting**, AIFrameOS ensures that AI-generated code is surgically precise, architecturally consistent, and virtually hallucination-free.
+By relying on strict **Context Engineering**, the **WISC Protocol** (with built-in self-healing), and **Metaprompting**, AIFrameOS ensures that AI-generated code is surgically precise, architecturally consistent, and virtually hallucination-free.
+
+### 🌟 Key Features
+- **Context-Aware Initialization:** Automatically detects your tech stack (e.g., Svelte 5, Rust) and domain to generate specialized AI skills.
+- **Sub-Agent Orchestration:** Delegates complex tasks to isolated sub-agents to prevent context degradation and token bloat.
+- **Self-Healing WISC Engine:** Automatically takes pre-flight git snapshots and executes retry loops if validation gates fail.
+- **MCP Tool Assimilation:** Seamlessly ingests external data (Jira, Figma, DB schemas) via Model Context Protocol into system-enforced constraints.
+- **Non-Destructive Updates:** Safely upgrade the core AIFrameOS engine without losing your custom constraints or prompts.
 
 ---
 
@@ -82,10 +89,11 @@ Once you have reviewed the generated `.yaml` PRP, tell your AI:
 
 **What happens:**
 The AI executes `.aiframe/commands/execute-prp.md`.
-1. **Isolate & Write:** It is physically restricted to modifying *only* the files listed in the Context Anchors.
-2. **Mimicry:** It formats code strictly based on the `examples/` provided.
-3. **Validate:** It *must* run the validation commands (e.g., `npm run test`) defined in the PRP. If tests fail, it halts.
-4. **Compress:** Upon success, it updates `catalog.json` and flushes the context, keeping the chat history lean and cheap.
+1. **Sub-Agent Delegation:** If the task is complex, it automatically spins up `/subagent` subprocesses with clean context windows to handle isolated chunks of work.
+2. **Isolate & Write:** It is physically restricted to modifying *only* the files listed in the Context Anchors (WISC).
+3. **Mimicry:** It formats code strictly based on the `examples/` provided.
+4. **Validate & Recover:** It *must* run validation commands (e.g., `npm run test`). If tests fail, it attempts a 3-try self-healing loop to diagnose and fix errors before rolling back.
+5. **Compress:** Upon success, it updates `catalog.json` and flushes the context, keeping the chat history lean and cheap.
 
 ---
 
@@ -98,10 +106,13 @@ The AI executes `.aiframe/commands/execute-prp.md`.
 │   ├── rules.yaml           # Strict constraints (halt_on_violation)
 │   └── wisc_engine.yaml     # WISC (Write, Isolate, Select, Compress) execution logic
 ├── commands/                # The Execution Pipelines
-│   ├── init.md              # Discovery, setup, IDE bootstrapping
+│   ├── init.md              # Discovery, stack sniffing, and IDE bootstrapping
 │   ├── generate-prp.md      # Intent -> CRAFT/Agent Metaprompt compiler
 │   ├── execute-prp.md       # Deterministic executor & validation gate
-│   └── process-docs.md      # Intake processor for raw notes
+│   ├── process-docs.md      # Intake processor for raw notes
+│   ├── subagent.md          # Multi-agent subprocess delegation
+│   ├── assimilate.md        # MCP integration for external knowledge ingestion
+│   └── defrag.md            # Memory/token compression and catalog cleanup
 ├── prompts/                 # Metaprompt Framework templates
 │   └── templates/
 │       ├── CRAFT.md         # Context/Role/Action/Format/Target
