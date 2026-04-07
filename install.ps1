@@ -43,6 +43,10 @@ If ($IS_UPDATE) {
     Move-Item -Path (Join-Path $TMP_DIR "aiframeos-main\.aiframe") -Destination "." -Force
     
     # Create empty directories not tracked by git
+    New-Item -Path "$AIFRAME_DIR/rules" -ItemType Directory -Force | Out-Null
+    New-Item -Path "$AIFRAME_DIR/ai-data" -ItemType Directory -Force | Out-Null
+    New-Item -Path "$AIFRAME_DIR/status/plans" -ItemType Directory -Force | Out-Null
+    New-Item -Path "$AIFRAME_DIR/validators" -ItemType Directory -Force | Out-Null
     New-Item -Path "$AIFRAME_DIR/dev-docs/docs-of-interest" -ItemType Directory -Force | Out-Null
     New-Item -Path "$AIFRAME_DIR/dev-docs/architecture" -ItemType Directory -Force | Out-Null
     New-Item -Path "$AIFRAME_DIR/dev-docs/commentaries" -ItemType Directory -Force | Out-Null

@@ -33,6 +33,10 @@ else
     # Greenfield install
     curl -sSL "https://github.com/sathya-py/aiframeos/archive/refs/heads/main.tar.gz" | tar -xz "aiframeos-main/.aiframe" --strip-components=1
     # Ensure tracking folders exist (Git does not track empty directories)
+    mkdir -p "$AIFRAME_DIR/rules"
+    mkdir -p "$AIFRAME_DIR/ai-data"
+    mkdir -p "$AIFRAME_DIR/status/plans"
+    mkdir -p "$AIFRAME_DIR/validators"
     mkdir -p "$AIFRAME_DIR/dev-docs/docs-of-interest"
     mkdir -p "$AIFRAME_DIR/dev-docs/architecture"
     mkdir -p "$AIFRAME_DIR/dev-docs/commentaries"
