@@ -1,50 +1,34 @@
-# GEMINI.md
+# GEMINI.md — aiframeos (AI Kernel Engine)
 
 ## Project Overview
-**aiframeos** is a nascent project intended to explore the development of an AI-centric framework or operating system (AIOS). The goal is to create a "kernel" that manages Large Language Model (LLM) resources, agent scheduling, and tool integrations, similar to a traditional OS but optimized for AI agents.
+**aiframeos** is a framework for managing Large Language Model (LLM) resources, agent scheduling, and context engineering. It implements the **WISC 3-Tier Architecture** to minimize token waste and maximize agentic precision.
 
-### Core Concepts (To Be Implemented)
-- **LLM Kernel:** A central manager for LLM requests, providing resource allocation and context management for multiple agents.
-- **Agent Scheduling:** Implementing mechanisms to handle multi-agent task execution and priority.
-- **Memory & Storage:** Structured systems for long-term and short-term agent memory.
-- **Tool Access:** Standardized interfaces for agents to interact with the host system and external APIs.
+### Core Concepts (WISC v2)
+- **Tier 1 (Core):** Bootloader, Rules, and Session Bridges. (Always Loaded)
+- **Tier 2 (Rules):** Path-triggered technology/layer rules. (Auto-Activated)
+- **Tier 3 (Docs):** Deep reference, scout-gated with headers. (Scout-Gated)
+- **Session Bridge:** `HANDOFF.md` replaces conversation history, saving ~25x tokens.
 
-## Building and Running
-As the project is currently in its initial setup phase, no build or run commands are yet defined. 
+## Running the Framework
+The framework is controlled through specific commands in `.aiframe/commands/`.
 
-### Initial Setup Recommendations
-1.  **Project Structure:** Define the core directories (e.g., `src/kernel`, `src/agents`, `src/tools`).
-2.  **Environment:** Set up a Python (using `pyproject.toml` or `requirements.txt`) or Node.js (using `package.json`) environment.
-3.  **LLM Integration:** Choose an initial LLM backend (e.g., OpenAI API, local llama.cpp, or vLLM).
+### Commands (Simplified)
+- `/status`: Check current state, next action, and context health.
+- `/handoff`: Bridge current session to the next (Writes `HANDOFF.md`).
+- `/prime-[subsystem]`: Scoped priming for a specific codebase area.
+- `/plan-task [ID]`: Research and generate a Plan-Execution separation.
+- `/execute-task [ID]`: Perform surgical changes based on a READY plan.
 
-- **TODO:** Define build system and execution commands in this section once the foundation is laid.
+## AI Kernel Rules
+- **Surgical Updates:** Never overwrite files; use precise replacements.
+- **SSOT Enforcement:** Data structures must follow `dev-docs/ssot/` definitions.
+- **Invariants (INV-XX-XX):** Hard architectural constraints.
+- **Git Memory:** Every framework change includes a `Context:` block in the commit.
 
-## Development Conventions
-To ensure a robust and maintainable AIOS, follow these conventions:
-- **Modular Design:** Keep the kernel logic strictly separated from agent implementations and tool definitions.
-- **Typed Interfaces:** Use strict typing (e.g., TypeScript or Python type hints) for all core interfaces to manage complex LLM data structures.
-- **Async Execution:** Prioritize asynchronous patterns for LLM calls and tool interactions to ensure the "OS" remains responsive.
-- **Comprehensive Logging:** Implement detailed logging of agent-kernel interactions for debugging and observability.
-- **Testing Strategy:** 
-    - **Unit Tests:** For individual kernel components and tools.
-    - **Integration Tests:** For agent-kernel interaction flows.
-    - **Benchmark Tests:** To measure latency and resource overhead of the AIOS kernel.
+## Development Strategy
+1. **Plan (Session A):** Noise-heavy exploration, culminating in a `status/plans/*.md` file.
+2. **Execute (Session B):** Clean context, reading only the Plan and `HANDOFF.md`.
+3. **Validate:** Automated gates in `.aiframe/validators/`.
 
-## Architectural Principles (AI Architect Skills)
-This project adheres to high-level architectural standards inspired by the `antigravity-awesome-skills` library:
-
-### Core Competencies
-- **System Design & Patterns:** Utilize C4 models and Architecture Decision Records (ADRs) to document and visualize the system. Implement Domain-Driven Design (DDD) for core kernel domains.
-- **LLM Application Patterns:** Mastery of advanced patterns such as RAG (Retrieval-Augmented Generation), LangGraph for complex agentic workflows, and persistent context management.
-- **API & Integration:** Prioritize robust API design principles and seamless integration with external tools and services through the Model Context Protocol (MCP) or similar standards.
-
-### Responsibilities
-- **Scalable Orchestration:** Design the kernel to handle multi-agent orchestration with a focus on observability and performance optimization.
-- **Security & Compliance:** Conduct regular security audits of LLM interactions and tool access to ensure safe agentic operations.
-- **Infrastructure Automation:** Automate the deployment and scaling of AIOS components across cloud-native environments (K8s, Serverless, etc.).
-
-## Getting Started
-1. Initialize the workspace with a preferred build tool.
-2. Draft the initial kernel architecture and define the first `Agent` and `Tool` interfaces.
-3. Create a basic proof-of-concept (PoC) showing an agent executing a simple task through the kernel.
-4. Update this file as the project matures.
+---
+*Status: WISC v2.0 Active*

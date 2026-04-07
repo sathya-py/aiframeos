@@ -1,31 +1,81 @@
-version: "1.0"
-description: "Execution logic for the WISC (Write, Isolate, Select, Compress) Protocol."
+version: "2.0"
+description: "AI Kernel Execution Protocol — WISC 3-Tier Architecture"
 
-strategies:
-  Write:
-    - rule: "Surgical precision"
-      description: "Perform AST-aware or targeted replacements instead of rewriting entire files."
-      action: "Enforce exact literal replacements or minimal diffs. Avoid full-file overwrites for existing files."
-  
-  Isolate:
-    - rule: "Scope containment"
-      description: "Limit the execution scope to the specific files and symbols defined in the PRP context_anchors."
-      action: "Reject any tool call attempting to modify files outside the context_anchors without explicit authorization."
-  
-  Select:
-    - rule: "Symbolic Resolution"
-      description: "Never read full files unless under 100 lines. Use grep/AST search to find interfaces, classes, and function signatures."
-      techniques:
-        - "Use grep with regex to find function signatures (e.g., `def my_func`, `class MyClass`, `interface MyInterface`)."
-        - "Use grep with context (e.g., `-C 5`) to read only the necessary surrounding lines."
-        - "Use targeted file reading with start_line and end_line for surgical reading."
-  
-  Recover:
-    - rule: "Self-Healing & Auto-Rollback"
-      description: "If a validation gate fails, do not immediately halt. Attempt a self-healing retry loop or rollback to a known good state."
-      action: "Take a pre-flight git snapshot before execution. If validation fails, spawn a sub-prompt with error logs to retry up to 3 times. If all retries fail, execute rollback to the pre-flight snapshot."
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tier 1 — ALWAYS LOADED (~3,000 tokens, non-negotiable)
+# Content:  System philosophy, machine law, WISC protocol
+# Rule:     Keep under 500 total lines. Every line must earn its place.
+# ═══════════════════════════════════════════════════════════════════════════════
+tier_1:
+  core_files:
+    - ".aiframe/core/bootloader.md"
+    - ".aiframe/core/rules.yaml"
+    - ".aiframe/core/wisc_engine.yaml"
+  session_bridge:
+    - ".aiframe/status/HANDOFF.md"  # Read at START of every session
 
-  Compress:
-    - rule: "State Summarization"
-      description: "After completing a PRP, summarize the architectural changes and update the status tracking files instead of keeping the full implementation details in context."
-      action: "Update .aiframe/status/catalog.json and relevant dev-docs/ssot/ files with compressed state."
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tier 2 — PATH-TRIGGERED (~500–1,500 tokens, only when relevant)
+# Content:  Domain-specific rules per technology/layer
+# Trigger:  'paths:' frontmatter — auto-activates when editing matching files
+# ═══════════════════════════════════════════════════════════════════════════════
+tier_2:
+  rules_directory: ".aiframe/rules/"
+  loading_protocol: "Auto-load when editing files matching glob patterns in rules frontmatter."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tier 3 — SCOUT-GATED (~500–5,000 tokens, only when confirmed needed)
+# Content:  Deep architecture docs, full schemas, API references
+# Protocol: Sub-agent reads first 20 lines to assess relevance.
+#           Loads full doc ONLY if scout confirms it's needed.
+# ═══════════════════════════════════════════════════════════════════════════════
+tier_3:
+  docs_directory: ".aiframe/dev-docs/"
+  loading_protocol: "Scout-Header-Confirmation (Read first 20 lines before full read)."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Session Lifecycle & Protocols
+# ═══════════════════════════════════════════════════════════════════════════════
+session_protocols:
+  new_session:
+    step_1: "Read .aiframe/status/HANDOFF.md (Skip history/README/index)."
+    step_2: "Check context budget. If < 40K tokens, force new session."
+    step_3: "Scoped priming: Use /prime-[subsystem] instead of /prime."
+
+  planning_vs_execution:
+    session_a_planning:
+      goal: "Research, sub-agent coordination, write PLAN file."
+      output: ".aiframe/status/plans/{task-id}-plan.md"
+    session_b_execution:
+      goal: "Fresh context, read plan file, execute surgically, run gates."
+      dependency: "Requires READY_FOR_EXECUTION plan file."
+
+  handoff:
+    command: "/handoff"
+    action: "Write .aiframe/status/HANDOFF.md with specific state metrics and 'Dead Ends'."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Quality Gates & Validators
+# ═══════════════════════════════════════════════════════════════════════════════
+quality_gates:
+  pre_generation:
+    - "Target line count for major docs (PRDs/Plans): 400-700 lines."
+    - "Check for required invariants (INV-XX-XX)."
+  post_generation:
+    - "Determinism Check: No probabilistic language ('maybe', 'probably')."
+    - "Contract Check: Ensure all new symbols follow SSOT definitions."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Long-Term Memory (Git)
+# ═══════════════════════════════════════════════════════════════════════════════
+git_protocol:
+  commit_message:
+    rule: "Include 'Context:' section if .aiframe files are modified."
+    template: |
+      [Subject]
+      
+      [Body - Why & What]
+      
+      Context:
+      - [Change to rule/plan/command]
+      - [Task state update]
