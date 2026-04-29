@@ -16,6 +16,10 @@ Run this in your terminal to drop the Kernel into any project:
 # Mac / Linux / WSL
 curl -sSL https://raw.githubusercontent.com/sathya-py/AIFrameOS/main/install.sh | bash
 ```
+```powershell
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/sathya-py/AIFrameOS/main/install.ps1 | iex
+```
 
 ### 2. The Magic Command: `/handoff`
 When you're done for the day, or the AI starts getting confused, just type `/handoff`.

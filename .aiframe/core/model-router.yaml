@@ -1,0 +1,147 @@
+# AIFrameOS Model Router
+# Automatic model selection based on task characteristics
+# Override at any time with prefix: !opus / !sonnet / !haiku
+
+version: "1.0"
+default_model: "sonnet"
+
+# Model Definitions
+models:
+  opus:
+    id: "opus"
+    description: "Deep reasoning, architecture, complex analysis"
+    cost_tier: "high"
+    strengths:
+      - "Multi-step architectural planning"
+      - "Complex code review and refactoring"
+      - "System design decisions"
+      - "Ambiguous requirement interpretation"
+      - "Security audits"
+      - "Performance optimization strategy"
+      - "Legacy code archaeology (salvage stage 1-2)"
+
+  sonnet:
+    id: "sonnet"
+    description: "Balanced performance for general development"
+    cost_tier: "medium"
+    strengths:
+      - "Feature implementation"
+      - "Bug fixes"
+      - "Code generation"
+      - "Test writing"
+      - "Documentation"
+      - "Moderate refactoring"
+      - "PRP generation and execution"
+
+  haiku:
+    id: "haiku"
+    description: "Fast, efficient for simple and structured tasks"
+    cost_tier: "low"
+    strengths:
+      - "Quick lookups and file searches"
+      - "Simple formatting and renaming"
+      - "Status queries"
+      - "Trivial edits"
+      - "Structured template filling (handoff, excerpts)"
+
+# Task-to-Model Routing Rules
+routing_rules:
+  opus_triggers:
+    commands:
+      - "/generate-prd"
+      - "/init"
+      - "/process-docs"
+      - "/salvage"          # stages 1 & 2
+    keywords:
+      - "architect"
+      - "design system"
+      - "security audit"
+      - "performance review"
+      - "refactor architecture"
+      - "analyze trade-offs"
+      - "complex bug"
+      - "root cause"
+      - "legacy migration"
+      - "salvage"
+    file_patterns:
+      - "**/ssot/*.yaml"
+      - "**/core/*.yaml"
+
+  sonnet_triggers:
+    commands:
+      - "/generate-prp"
+      - "/execute-prp"
+      - "/assimilate"
+      - "/upgrade"
+    keywords:
+      - "implement"
+      - "add feature"
+      - "fix bug"
+      - "write test"
+      - "create component"
+      - "update"
+      - "modify"
+      - "port code"
+    file_patterns:
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/*.rs"
+      - "**/*.py"
+      - "**/*.go"
+      - "**/*.java"
+      - "**/*.cs"
+
+  haiku_triggers:
+    commands:
+      - "/status"
+      - "/handoff"
+      - "/defrag"
+      - "/tempwipe"
+      - "/prime"
+      - "/subagent"
+      - "/extract-excerpts"
+    keywords:
+      - "list"
+      - "show"
+      - "find file"
+      - "what is"
+      - "where is"
+      - "format"
+      - "rename"
+      - "simple"
+      - "quick"
+      - "clean up"
+    operations:
+      - "file_search"
+      - "status_check"
+      - "simple_edit"
+      - "template_fill"
+
+# Override Rules (highest priority)
+overrides:
+  force_opus: "!opus"
+  force_sonnet: "!sonnet"
+  force_haiku: "!haiku"
+
+  escalation:
+    - condition: "error_count > 2"
+      action: "upgrade_model"
+    - condition: "file_count > 10"
+      action: "upgrade_model"
+    - condition: "requires_architectural_change"
+      action: "use_opus"
+    - condition: "cross_domain_impact"
+      action: "use_opus"
+
+# Usage Instructions for AI
+ai_instructions: |
+  When processing a user request:
+  1. Check for force prefix (!opus, !sonnet, !haiku) — apply immediately
+  2. Match against command triggers if a slash command was used
+  3. Scan request for keyword triggers
+  4. Consider file patterns being touched
+  5. Apply escalation rules if complexity increases mid-task
+  6. Default to sonnet if no clear match
+
+  Report model selection in responses when switching models:
+  "[Model: opus] Analyzing architecture..."

@@ -1,5 +1,5 @@
-version: "2.0"
-description: "AI Kernel Execution Protocol — WISC 3-Tier Architecture"
+version: "2.1"
+description: "AI Kernel Execution Protocol — WISC Multi-Tier Architecture"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Tier 1 — ALWAYS LOADED (~3,000 tokens, non-negotiable)
@@ -11,6 +11,7 @@ tier_1:
     - ".aiframe/core/bootloader.md"
     - ".aiframe/core/rules.yaml"
     - ".aiframe/core/wisc_engine.yaml"
+    - ".aiframe/core/command-manifest.yaml"  # ~200 tokens; loaded for command awareness
   session_bridge:
     - ".aiframe/status/HANDOFF.md"  # Read at START of every session
 
@@ -32,6 +33,19 @@ tier_2:
 tier_3:
   docs_directory: ".aiframe/dev-docs/"
   loading_protocol: "Scout-Header-Confirmation (Read first 20 lines before full read)."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tier 3.5 — CURATED EXTRACTS (legacy reference, never authoritative)
+# Content:  Curated legacy or imported code preserved for algorithm / pattern reference
+# Protocol: Read for algorithms, tests, data shapes, and historical patterns.
+#           NEVER override current SSOT with extract content.
+#           Always re-map extracted code to current module ownership before use.
+# ═══════════════════════════════════════════════════════════════════════════════
+tier_3_5:
+  extracts_directory: ".aiframe/dev-docs/extracts/"
+  loading_protocol: "Explicit scout-then-confirm. Use only after checking SSOT first."
+  authority: "reference_only"
+  catalog_file: ".aiframe/dev-docs/extracts/catalog.md"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Session Lifecycle & Protocols

@@ -1,0 +1,89 @@
+# AIFrameOS Command Manifest (Compact Boot Reference)
+# ~200 tokens - loaded at session start for proactive command suggestion
+
+version: "2.0"
+
+commands:
+  # === PLANNING PHASE ===
+  init:
+    trigger: "new project, bootstrap, setup, fresh start"
+    model: opus
+    flow_next: generate-prd
+
+  generate-prd:
+    trigger: "broad feature, product requirement, new capability, high-level design"
+    model: opus
+    flow_next: generate-prp
+
+  generate-prp:
+    trigger: "implementation task, specific feature, bug fix, scoped change"
+    model: sonnet
+    flow_next: execute-prp
+
+  # === EXECUTION PHASE ===
+  execute-prp:
+    trigger: "implement, build, code the prp, run task"
+    model: sonnet
+    requires: "active PRP in .aiframe/prps/"
+
+  # === MIGRATION ===
+  salvage:
+    trigger: "port legacy code, migrate old project, salvage from old codebase"
+    model: opus
+    stages: ["archaeologist", "architect", "engineer", "executor"]
+    flow_next: execute-prp
+
+  # === CONTEXT MANAGEMENT ===
+  status:
+    trigger: "what's pending, show tasks, current state, dashboard"
+    model: haiku
+
+  handoff:
+    trigger: "save session, context full, switching tasks, end of session"
+    model: haiku
+    writes: ".aiframe/status/HANDOFF.md"
+
+  defrag:
+    trigger: "clean context, reduce tokens, optimize memory, garbage collect"
+    model: haiku
+
+  prime:
+    trigger: "load context, prepare for task, focus on subsystem"
+    model: haiku
+
+  # === KNOWLEDGE OPS ===
+  process-docs:
+    trigger: "ingest docs, learn codebase, extract knowledge, intake notes"
+    model: opus
+
+  assimilate:
+    trigger: "merge knowledge, update ssot, consolidate external data"
+    model: sonnet
+
+  extract-excerpts:
+    trigger: "write docs for stakeholders, document decisions, export for business/marketing/legal"
+    model: haiku
+    writes: ".aiframe/user-docs/documentation-excerpts/"
+
+  # === UTILITY ===
+  subagent:
+    trigger: "parallel task, delegate work, isolated scout"
+    model: haiku
+
+  tempwipe:
+    trigger: "clean temp, remove scratch files, prune .tmp"
+    model: haiku
+
+  upgrade:
+    trigger: "update aiframe, migrate config, bump framework version"
+    model: sonnet
+
+# Workflow Pipelines (suggest when pattern detected)
+pipelines:
+  new_feature:     ["generate-prd", "generate-prp", "execute-prp"]
+  bug_fix:         ["generate-prp", "execute-prp"]
+  exploration:     ["process-docs", "assimilate"]
+  legacy_migration:["salvage", "execute-prp"]
+  documentation:   ["extract-excerpts"]
+  session_end:     ["handoff"]
+  maintenance:     ["defrag", "tempwipe"]
